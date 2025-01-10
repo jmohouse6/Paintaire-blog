@@ -1,0 +1,33 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const navItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'About', href: '/about' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<header class="bg-white dark:bg-gray-800 shadow-sm">
+  <nav class="container mx-auto px-4 py-4">
+    <div class="flex items-center justify-between">
+      <a href="/" class="text-2xl font-bold text-primary dark:text-white">Paintaire</a>
+      <div class="flex items-center space-x-6">
+        <ul class="flex space-x-6">
+          {navItems.map(item => (
+            <li>
+              <a 
+                href={item.href}
+                class="text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+        <ThemeToggle />
+      </div>
+    </div>
+  </nav>
+</header>

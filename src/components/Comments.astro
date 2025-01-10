@@ -1,0 +1,53 @@
+---
+interface Props {
+  theme?: 'light' | 'dark';
+}
+
+const { theme = 'light' } = Astro.props;
+---
+
+<div class="mt-12 pt-8 border-t dark:border-gray-700">
+  <h2 class="text-2xl font-bold text-primary dark:text-white mb-8">Comments</h2>
+  <div class="giscus"></div>
+</div>
+
+<script
+  src="https://giscus.app/client.js"
+  data-repo="[REPO-NAME]" <!-- Replace with your GitHub repository -->
+  data-repo-id="[REPO-ID]" <!-- Replace with your repository ID -->
+  data-category="Comments" <!-- Replace with your GitHub Discussions category -->
+  data-category-id="[CATEGORY-ID]" <!-- Replace with your category ID -->
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme={theme}
+  data-lang="en"
+  crossorigin="anonymous"
+  async
+></script>
+
+<script>
+  // Update theme when system preference changes
+  const updateGiscusTheme = (theme: string) => {
+    const iframe = document.querySelector<HTMLIFrameElement>('iframe.giscus-frame');
+    if (!iframe) return;
+    iframe.contentWindow?.postMessage(
+      { giscus: { setConfig: { theme } } },
+      'https://giscus.app'
+    );
+  };
+
+  // Watch for theme changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        const isDark = document.documentElement.classList.contains('dark');
+        updateGiscusTheme(isDark ? 'dark' : 'light');
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, { attributes: true });
+</script>

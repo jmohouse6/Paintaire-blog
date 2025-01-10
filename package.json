@@ -1,0 +1,33 @@
+{
+  "name": "paintaire-blog",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^2.1.1",
+    "@astrojs/rss": "^4.0.5",
+    "@astrojs/sitemap": "^3.1.1",
+    "@astrojs/tailwind": "^5.1.0",
+    "@keystatic/astro": "^2.0.0",
+    "@keystatic/core": "^0.5.0",
+    "astro": "^4.5.0",
+    "astro-seo": "^0.8.3",
+    "marked": "^12.0.0",
+    "sanitize-html": "^2.12.1",
+    "tailwindcss": "^3.4.1",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.10",
+    "@types/node": "^20.11.24",
+    "@types/sanitize-html": "^2.11.0",
+    "typescript": "^5.3.3"
+  }
+}

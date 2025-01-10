@@ -1,0 +1,46 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  posts: CollectionEntry<'posts'>[];
+}
+
+const { posts } = Astro.props;
+---
+
+<section class="py-12">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-primary mb-8">Featured Articles</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {posts.map(post => (
+        <article class="bg-white rounded-lg shadow-md overflow-hidden">
+          {post.data.image && (
+            <img 
+              src={post.data.image}
+              alt={post.data.title}
+              class="w-full h-48 object-cover"
+            />
+          )}
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-2">
+              <a href={`/blog/${post.slug}`} class="text-primary hover:text-secondary">
+                {post.data.title}
+              </a>
+            </h3>
+            <p class="text-gray-600 mb-4">{post.data.excerpt}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">
+                {new Date(post.data.publishedDate).toLocaleDateString()}
+              </span>
+              {post.data.categories && post.data.categories.length > 0 && (
+                <span class="text-sm text-accent">
+                  {post.data.categories[0]}
+                </span>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

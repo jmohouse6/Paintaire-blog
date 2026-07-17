@@ -52,3 +52,8 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Moorhouse Ecosystem
+
+This repository is part of the [Moorhouse Coating ecosystem](https://github.com/jmohouse6/ecosystem).
+See its `ECOSYSTEM.md` for platform architecture and conventions.

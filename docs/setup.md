@@ -5,7 +5,7 @@ Setup guide for the Paintaire Blog — an Astro 4 site with Keystatic CMS.
 ## Prerequisites
 
 - **Node.js** 18.17.1+ or 20+ (Astro 4 requirement — use a current LTS)
-- **pnpm** (canonical package manager for this repo — `pnpm-lock.yaml`)
+- **pnpm** (canonical package manager for this repo — `pnpm-lock.yaml`). The repo pins `pnpm@10.18.3` via the `packageManager` field in `package.json`; enable Corepack (`corepack enable`) so the pinned version is used automatically.
 
 ## Installation
 

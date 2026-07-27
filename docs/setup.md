@@ -113,6 +113,17 @@ pnpm dev -- --port 3000
   pnpm dev
   ```
 
+### `ERR_PNPM_IGNORED_BUILDS` on install/dev/build
+
+pnpm 11 turns ignored dependency build scripts (`esbuild`, `sharp`) into a hard error, even though `pnpm-workspace.yaml` lists them in `onlyBuiltDependencies`. The repo pins `pnpm@10.18.3` via the `packageManager` field, so the fix is to use the pinned version:
+
+```bash
+corepack enable   # one-time; makes pnpm resolve to the pinned 10.18.3
+pnpm install
+```
+
+Alternatively, if you must stay on pnpm 11, run `pnpm approve-builds` and approve `esbuild` and `sharp`.
+
 ### Stale `node_modules`
 
 If dependencies behave inconsistently (e.g. after pulling changes), do a clean install:

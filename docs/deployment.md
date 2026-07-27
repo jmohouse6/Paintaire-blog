@@ -16,6 +16,7 @@ Deployment guide for the Paintaire Blog (Astro 4, `output: 'hybrid'`) at paintai
 | Sitemap             | Generated at build; excludes `/admin` and `/keystatic` paths |
 | RSS feed            | `/rss.xml` (static, prerendered at build)          |
 | CMS                 | Keystatic, `storage: 'local'` (git-based, local)   |
+| Hosting (current)   | Railway — project/service `paintaire-blog` (production) |
 
 ## The adapter caveat
 
@@ -53,6 +54,37 @@ Caveat: Keystatic's `/keystatic` admin UI is an SSR route. With `storage: 'local
 ### Path (b): Install an adapter for your target host
 
 Replace `@astrojs/node` with the platform adapter and update `astro.config.mjs`. See the per-host quickstarts below.
+
+## Railway (current production host)
+
+The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire-blog`
+(auto-deploy on push). Configuration:
+
+- **Builder:** Railpack (default) — detects pnpm via `pnpm-lock.yaml`
+- **Build command:** `pnpm build`
+- **Start command:** `node ./dist/server/entry.mjs`
+- **Package manager pin:** `packageManager: pnpm@10.18.3` in `package.json` is **required** —
+  Railpack otherwise defaults to pnpm v9, which rejects the v10-style
+  `pnpm-workspace.yaml` (`packages field missing or empty` build failure).
+- **Preview URL:** https://paintaire-blog-production.up.railway.app
+- **Custom domain:** `paintaire.com` (see DNS below)
+
+### DNS for paintaire.com
+
+Railway requires these DNS records (live status in the Railway dashboard):
+
+| Type  | Name              | Value                                            |
+| ----- | ----------------- | ------------------------------------------------ |
+| CNAME | `@`               | `wql8sgyz.up.railway.app`                        |
+| TXT   | `_railway-verify` | `railway-verify=…` (full value in Railway dashboard) |
+
+Notes:
+
+- Apex/root domains cannot use a plain CNAME on many DNS providers — use a provider
+  with CNAME flattening / ALIAS / ANAME support (e.g. Cloudflare), or delegate to
+  Railway's nameservers.
+- TLS is provisioned automatically once DNS verifies; certificate status starts at
+  `VALIDATING_OWNERSHIP` until the records are in place.
 
 ## Vercel
 

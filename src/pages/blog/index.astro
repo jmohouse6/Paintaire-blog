@@ -5,8 +5,8 @@ import { getCollection } from 'astro:content';
 export const prerender = false;
 
 // Get URL parameters
-const { page = 1, category } = Astro.url.searchParams;
-const currentPage = parseInt(page.toString());
+const category = Astro.url.searchParams.get('category') ?? undefined;
+const currentPage = Math.max(1, parseInt(Astro.url.searchParams.get('page') ?? '1') || 1);
 const postsPerPage = 9;
 
 // Fetch posts

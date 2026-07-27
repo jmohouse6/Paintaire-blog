@@ -20,6 +20,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
   return {
     title: entry.data.title || fallback.title,
     description: entry.data.description || fallback.description,
-    socialLinks: entry.data.socialLinks,
+    socialLinks: (entry.data.socialLinks ?? []).flatMap((link) =>
+      link.platform && link.url ? [{ platform: link.platform, url: link.url }] : []
+    ),
   };
 }

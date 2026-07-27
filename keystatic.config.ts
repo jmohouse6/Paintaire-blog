@@ -71,6 +71,7 @@ export default config({
           fields.object({
             platform: fields.select({
               label: 'Platform',
+              defaultValue: 'twitter',
               options: [
                 { label: 'Twitter', value: 'twitter' },
                 { label: 'LinkedIn', value: 'linkedin' },

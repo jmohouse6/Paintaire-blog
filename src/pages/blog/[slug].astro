@@ -66,7 +66,13 @@ const keywords = [
               class="w-8 h-8 rounded-full"
             />
           )}
-          <span itemprop="name">{author?.data.name}</span>
+          {author ? (
+            <a href={`/authors/${author.slug}`} class="hover:text-primary dark:hover:text-white" itemprop="name">
+              {author.data.name}
+            </a>
+          ) : (
+            <span itemprop="name">{author?.data.name}</span>
+          )}
         </div>
         <time datetime={post.data.publishedDate.toISOString()} itemprop="datePublished">
           {new Date(post.data.publishedDate).toLocaleDateString('en-US', {

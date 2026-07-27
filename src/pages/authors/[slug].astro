@@ -1,0 +1,80 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const authors = await getCollection('authors');
+  return authors.map(author => ({
+    params: { slug: author.slug },
+    props: { author },
+  }));
+}
+
+const { author } = Astro.props;
+
+const posts = (await getCollection('posts'))
+  .filter(post => post.data.author === author.slug)
+  .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf());
+---
+
+<BaseLayout
+  title={author.data.name}
+  description={author.data.bio}
+  image={author.data.avatar}
+  type="website"
+>
+  <div class="max-w-4xl mx-auto">
+    <header class="flex items-center gap-6 mb-12">
+      {author.data.avatar && (
+        <img
+          src={author.data.avatar}
+          alt={author.data.name}
+          class="w-24 h-24 rounded-full object-cover"
+        />
+      )}
+      <div>
+        <h1 class="text-4xl font-bold text-primary dark:text-white mb-2">{author.data.name}</h1>
+        {author.data.bio && (
+          <p class="text-gray-600 dark:text-gray-300">{author.data.bio}</p>
+        )}
+      </div>
+    </header>
+
+    <h2 class="text-2xl font-bold text-primary dark:text-white mb-6">
+      Articles by {author.data.name}
+    </h2>
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {posts.map(post => (
+          <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+            {post.data.image && (
+              <img
+                src={post.data.image}
+                alt={post.data.title}
+                class="w-full h-48 object-cover"
+              />
+            )}
+            <div class="p-6">
+              <h3 class="text-xl font-semibold mb-2">
+                <a href={`/blog/${post.slug}`} class="text-primary dark:text-white hover:text-secondary dark:hover:text-accent">
+                  {post.data.title}
+                </a>
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">{post.data.excerpt}</p>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {new Date(post.data.publishedDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="text-gray-600 dark:text-gray-300">No articles published yet.</p>
+    )}
+  </div>
+</BaseLayout>

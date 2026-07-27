@@ -5,6 +5,8 @@ import { marked } from 'marked';
 
 export async function GET(context) {
   const posts = await getCollection('posts');
+  const authors = await getCollection('authors');
+  const authorNames = new Map(authors.map((a) => [a.slug, a.data.name]));
   
   // Sort posts by date, newest first
   const sortedPosts = posts.sort((a, b) => 
@@ -22,7 +24,7 @@ export async function GET(context) {
       link: `/blog/${post.slug}/`,
       content: sanitizeHtml(marked.parse(post.body)),
       categories: post.data.categories,
-      author: post.data.author
+      author: authorNames.get(post.data.author) || post.data.author
     })),
     customData: `<language>en-us</language>`,
   });

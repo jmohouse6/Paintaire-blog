@@ -74,13 +74,10 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 > Both Railway custom domains are `ACTIVE` but unverified, certificates in
 > `VALIDATING_OWNERSHIP`, waiting on the records below.
 >
-> **Two Railway projects exist** (one per hostname) — they can be consolidated into a
-> single service holding both custom domains:
->
-> | Project / service            | Domain              | Required CNAME              |
-> | ---------------------------- | ------------------- | --------------------------- |
-> | `paintaire-blog` / `paintaire-blog` | `paintaire.com` (apex) | `@` → `wql8sgyz.up.railway.app` |
-> | `paintaire-blog` / `blog`    | `www.paintaire.com` | `www` → `aq0rqpar.up.railway.app` (current: Netlify) |
+> **Consolidated (2026-07-26):** a single Railway project (`paintaire-blog`, service
+> `paintaire-blog`) now holds both custom domains plus
+> `paintaire-blog-production.up.railway.app`. Two duplicate projects created during
+> initial setup were deleted.
 >
 > Each domain also needs its `_railway-verify` TXT record (values in the Railway
 > dashboard — they differ per domain).
@@ -93,7 +90,7 @@ Railway requires these DNS records (live status in the Railway dashboard):
 | ----- | --------------------- | -------------------------------------------------- |
 | CNAME | `@`                   | `wql8sgyz.up.railway.app`                          |
 | TXT   | `_railway-verify`     | `railway-verify=…` (apex value in Railway dashboard) |
-| CNAME | `www`                 | `aq0rqpar.up.railway.app`                          |
+| CNAME | `www`                 | `y9suy4m9.up.railway.app`                          |
 | TXT   | `_railway-verify.www` | `railway-verify=…` (www value in Railway dashboard) |
 
 Notes:

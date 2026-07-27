@@ -13,7 +13,7 @@ Deployment guide for the Paintaire Blog (Astro 4, `output: 'hybrid'`) at paintai
 | Build command       | `pnpm build` → outputs to `./dist/`                |
 | Start command       | `node ./dist/server/entry.mjs` (SSR server)        |
 | Canonical site URL  | `https://paintaire.com` (set in `astro.config.mjs`) |
-| Sitemap             | Generated at build; excludes `/admin` paths        |
+| Sitemap             | Generated at build; excludes `/admin` and `/keystatic` paths |
 | RSS feed            | `/rss.xml` (static, prerendered at build)          |
 | CMS                 | Keystatic, `storage: 'local'` (git-based, local)   |
 
@@ -139,7 +139,7 @@ If browser-based editing in production is ever needed, switch Keystatic to `stor
 
 - [ ] `pnpm build` passes cleanly.
 - [ ] `site: 'https://paintaire.com'` is correct in `astro.config.mjs` (drives sitemap, canonical URLs, RSS).
-- [ ] Sitemap generated at `dist/sitemap-index.xml` and excludes `/admin` pages.
+- [ ] Sitemap generated at `dist/sitemap-index.xml` and excludes `/admin` and `/keystatic` pages.
 - [ ] RSS feed present at `dist/rss.xml`.
 - [ ] Images committed under `public/images/` (they are copied verbatim to `dist/`).
 - [ ] Blog content committed to git (Keystatic `local` storage — content ships with the repo).

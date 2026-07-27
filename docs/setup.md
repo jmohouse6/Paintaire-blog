@@ -50,7 +50,7 @@ pnpm start      # runs the standalone production server (node ./dist/server/entr
 | `pnpm dev`   | Start dev server at `localhost:4321`               |
 | `pnpm build` | Build production site to `./dist/`                 |
 | `pnpm preview` | Preview the production build locally             |
-| `pnpm astro` | Run Astro CLI commands (e.g. `npm run astro check`) |
+| `pnpm astro` | Run Astro CLI commands (e.g. `pnpm astro check`) |
 
 ## Project Structure
 
@@ -74,7 +74,7 @@ Paintaire-blog/
 - `site`: `https://paintaire.com`
 - `output`: `'hybrid'` (static by default, SSR on demand per page)
 - Adapter: `@astrojs/node` (standalone mode)
-- Integrations: `tailwind`, `mdx`, `sitemap` (excludes `/admin`), `keystatic`
+- Integrations: `tailwind`, `mdx`, `sitemap` (excludes `/admin` and `/keystatic`), `keystatic`
 - Markdown syntax highlighting: Shiki with the `github-dark` theme
 
 ### Key dependencies
@@ -128,5 +128,5 @@ Remove generated output and caches, then rebuild:
 
 ```bash
 rm -rf dist node_modules/.astro
-npm run build
+pnpm build
 ```

@@ -14,7 +14,9 @@ There are three collections:
 | `authors`  | Authors      | `src/content/authors/*` |
 | `settings` | Site Settings | `src/content/settings/*` |
 
-> **Note:** Site Settings entries already exist (`src/content/settings/site.md`, `paintaire.md`), but no template consumes them yet — editing them currently has no effect on the rendered site.
+> **Note:** Site Settings entries already exist (`src/content/settings/site.md`, `paintaire.md`) and are consumed site-wide via `src/utils/settings.ts` (layout description, footer title/description/social links), with a hardcoded fallback when no entry is found.
+
+In addition to the Keystatic schema (`keystatic.config.ts`), the `posts` and `authors` collections are also declared as Astro content collections in `src/content/config.ts` with Zod schemas. Astro validates frontmatter against those schemas at build time, so a post or author with missing/invalid frontmatter will fail `pnpm build`. The `settings` collection is Keystatic-only and has no Astro schema.
 
 ## Accessing the CMS
 
@@ -56,7 +58,7 @@ Because storage is local, the CMS only works while `pnpm dev` is running on your
 2. Fill in:
    - **Name** — full name; the slug becomes the author ID referenced by posts (e.g. `john-smith`).
    - **Avatar** — uploaded to `public/images/authors/`, referenced as `/images/authors/<filename>`.
-   - **Bio** — short biography, shown on the author page and post bylines.
+   - **Bio** — short biography, stored on the author entry (not currently rendered on the site — bylines show the author name only).
 3. Save, then select the new author when writing posts.
 
 Example (`src/content/authors/john-smith.md`):
@@ -152,4 +154,4 @@ Field notes:
 - `excerpt` — plain string summary.
 - Everything below the second `---` is the post body (markdown), stored in the `content` field.
 
-You can edit these files directly in a text editor as an alternative to the CMS — just keep the frontmatter keys and values consistent with the schema.
+You can edit these files directly in a text editor as an alternative to the CMS — just keep the frontmatter keys and values consistent with both schemas (`keystatic.config.ts` for editing, `src/content/config.ts` for build-time validation).

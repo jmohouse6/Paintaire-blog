@@ -25,4 +25,20 @@ const authors = defineCollection({
   }),
 });
 
-export const collections = { posts, authors };
+const settings = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string().optional(),
+    socialLinks: z
+      .array(
+        z.object({
+          platform: z.enum(['twitter', 'linkedin', 'facebook']),
+          url: z.string(),
+        })
+      )
+      .default([]),
+  }),
+});
+
+export const collections = { posts, authors, settings };

@@ -47,7 +47,7 @@ All commands are run from the project root:
 │   │   ├── config.ts        # Typed content-collection schemas (zod)
 │   │   ├── posts/           # Blog posts (Markdown with frontmatter)
 │   │   ├── authors/         # Author profiles
-│   │   └── settings/        # Site settings entries (not yet consumed by templates)
+│   │   └── settings/        # Site settings (consumed via src/utils/settings.ts)
 │   ├── layouts/
 │   │   └── BaseLayout.astro # Main layout (SEO, OG/Twitter meta, header/footer, theme script)
 │   ├── components/          # Header, Footer, FeaturedPosts, Comments, NewsletterForm, etc.
@@ -125,8 +125,6 @@ Comments are hidden entirely unless `PUBLIC_GISCUS_REPO` + `PUBLIC_GISCUS_REPO_I
   unless `PUBLIC_NEWSLETTER_ENDPOINT` is configured.
 - **Comments disabled by default** — Giscus only renders once the `PUBLIC_GISCUS_*`
   env vars are configured against a GitHub repo with Discussions enabled.
-- **Settings collection unconsumed** — `src/content/settings/` has content
-  (`site.md`, `paintaire.md`), but no layout/page reads it yet.
 
 ## License
 

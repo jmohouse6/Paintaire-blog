@@ -12,8 +12,14 @@ The official Paintaire blog — painting tips, industry news, and expert insight
 - **Styling:** Tailwind CSS + `@tailwindcss/typography`
 - **Content:** Astro content collections (Markdown, `src/content/`)
 - **Feeds/SEO:** `@astrojs/rss`, `@astrojs/sitemap`, `astro-seo`
-- **Comments:** Giscus (GitHub Discussions) — not yet configured, see Known Issues
-- **Package manager:** pnpm
+- **Comments:** Giscus (GitHub Discussions) — enabled via `PUBLIC_GISCUS_*` env vars; hidden when unset
+- **Package manager:** pnpm (`pnpm-lock.yaml`)
+
+## Documentation
+
+- [docs/setup.md](docs/setup.md) — Setup guide
+- [docs/content-authoring.md](docs/content-authoring.md) — Content authoring guide
+- [docs/deployment.md](docs/deployment.md) — Deployment guide
 
 ## Commands
 
@@ -34,20 +40,25 @@ All commands are run from the project root:
 ├── keystatic.config.ts      # Keystatic CMS collections (posts, authors, settings)
 ├── astro.config.mjs         # Integrations: tailwind, mdx, sitemap, keystatic
 ├── tailwind.config.mjs      # Brand colors (primary/secondary/accent), typography
+├── docs/                    # setup, content-authoring, deployment guides
 ├── public/                  # Static assets (post/author images live under /images)
 ├── src/
 │   ├── content/
+│   │   ├── config.ts        # Typed content-collection schemas (zod)
 │   │   ├── posts/           # Blog posts (Markdown with frontmatter)
-│   │   └── authors/         # Author profiles
+│   │   ├── authors/         # Author profiles
+│   │   └── settings/        # Site settings entries (not yet consumed by templates)
 │   ├── layouts/
-│   │   └── BaseLayout.astro # Main layout (SEO, OG/Twitter meta, header/footer)
-│   ├── components/          # Header, Footer, FeaturedPosts, Comments, etc.
+│   │   └── BaseLayout.astro # Main layout (SEO, OG/Twitter meta, header/footer, theme script)
+│   ├── components/          # Header, Footer, FeaturedPosts, Comments, NewsletterForm, etc.
 │   └── pages/
 │       ├── index.astro      # Home: company intro + featured posts
+│       ├── about.astro      # About page
+│       ├── contact.astro    # Contact page
+│       ├── privacy.astro    # Privacy policy
 │       ├── blog/index.astro # Blog listing (category filter, pagination)
-│       ├── blog/[slug].astro# Individual post pages
-│       ├── rss.xml.js       # RSS feed at /rss.xml
-│       └── sitemap-custom.xml.ts
+│       ├── blog/[slug].astro# Individual post pages (+ optional YouTube embed)
+│       └── rss.xml.js       # RSS feed at /rss.xml
 └── robots.txt
 ```
 
@@ -82,7 +93,7 @@ Posts can also be created by hand as Markdown files with the same frontmatter.
 ## Feeds & SEO
 
 - **RSS:** `/rss.xml` (generated from the posts collection)
-- **Sitemap:** `/sitemap-index.xml` via `@astrojs/sitemap` (`/admin` and `/keystatic` routes should stay excluded); `robots.txt` points at it. A legacy hand-built sitemap also exists at `/sitemap-custom.xml` (see Known Issues).
+- **Sitemap:** `/sitemap-index.xml` via `@astrojs/sitemap` (`/admin` and `/keystatic` routes excluded); `robots.txt` points at it.
 - **Meta:** `BaseLayout.astro` emits Open Graph, Twitter card, canonical, and article meta via `astro-seo`. Default OG image: `/images/default-og.jpg`.
 
 ## Deployment
@@ -92,30 +103,30 @@ prerendered where possible, and server-rendered routes (Keystatic admin/API) are
 served by a Node server. `pnpm build` → `./dist/`, then serve with `pnpm start`
 (`node ./dist/server/entry.mjs`). No hosting/CI configuration exists in this repo
 yet — the standalone output can run behind any Node-capable host or reverse proxy.
+See [docs/deployment.md](docs/deployment.md) for per-host guides.
+
+## Environment Variables
+
+All optional; the site builds and runs with none set.
+
+| Variable                     | Purpose                                                        |
+| :--------------------------- | :------------------------------------------------------------- |
+| `PUBLIC_GISCUS_REPO`         | GitHub repo for Giscus comments (`owner/name`)                 |
+| `PUBLIC_GISCUS_REPO_ID`      | Giscus repository ID                                           |
+| `PUBLIC_GISCUS_CATEGORY`     | Discussions category name (default `General`)                  |
+| `PUBLIC_GISCUS_CATEGORY_ID`  | Giscus category ID                                             |
+| `PUBLIC_NEWSLETTER_ENDPOINT` | URL the newsletter form POSTs to; submissions are simulated locally when unset |
+
+Comments are hidden entirely unless `PUBLIC_GISCUS_REPO` + `PUBLIC_GISCUS_REPO_ID` are set.
 
 ## Known Issues / TODO
 
-- **Giscus comments not configured** — `src/components/Comments.astro` still has
-  `[REPO-NAME]` / `[REPO-ID]` / `[CATEGORY-ID]` placeholders, and stray HTML comments
-  inside the `<script>` tag attributes break the embed. Needs real Giscus config.
-- **Newsletter form has no backend** — `src/components/NewsletterForm.astro` only logs
-  to the console; its privacy-policy link points to `/privacy`, which doesn't exist.
-- **`sitemap-custom.xml.ts` is stale** — advertises `/about`, `/contact`, and
-  `/authors/[slug]` pages that don't exist, duplicates the official sitemap
-  integration, and hardcodes the base URL. Candidate for deletion.
-- **YouTube embeds never rendered** — `youtubeUrl` is collected in the schema but
-  `blog/[slug].astro` doesn't output it.
-- **Dark mode incomplete** — the inline theme script in `BaseLayout.astro` is a stub;
-  `blog/[slug].astro` reads a `theme` cookie that can't work on prerendered pages
-  (and the value is never passed to the Comments component).
-- **Missing content config** — no `src/content/config.ts`, so collections are untyped
-  at build time despite `zod` being a dependency.
-- **Referenced-but-missing pages** — header nav links to `/about` and `/contact`;
-  neither exists.
-- **Settings collection unconsumed** — `src/content/settings/` now has content
+- **Newsletter form has no backend by default** — submissions are simulated locally
+  unless `PUBLIC_NEWSLETTER_ENDPOINT` is configured.
+- **Comments disabled by default** — Giscus only renders once the `PUBLIC_GISCUS_*`
+  env vars are configured against a GitHub repo with Discussions enabled.
+- **Settings collection unconsumed** — `src/content/settings/` has content
   (`site.md`, `paintaire.md`), but no layout/page reads it yet.
-- **Repo hygiene** — starter leftovers (`src/layouts/Layout.astro`,
-  `src/components/Card.astro`) are unused.
 
 ## License
 

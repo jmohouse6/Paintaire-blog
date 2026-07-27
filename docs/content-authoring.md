@@ -16,7 +16,7 @@ There are three collections:
 
 > **Note:** Site Settings entries already exist (`src/content/settings/site.md`, `paintaire.md`) and are consumed site-wide via `src/utils/settings.ts` (layout description, footer title/description/social links), with a hardcoded fallback when no entry is found.
 
-In addition to the Keystatic schema (`keystatic.config.ts`), the `posts` and `authors` collections are also declared as Astro content collections in `src/content/config.ts` with Zod schemas. Astro validates frontmatter against those schemas at build time, so a post or author with missing/invalid frontmatter will fail `pnpm build`. The `settings` collection is Keystatic-only and has no Astro schema.
+In addition to the Keystatic schema (`keystatic.config.ts`), all three collections (`posts`, `authors`, `settings`) are also declared as Astro content collections in `src/content/config.ts` with Zod schemas. Astro validates frontmatter against those schemas at build time, so an entry with missing/invalid frontmatter will fail `pnpm build`.
 
 ## Accessing the CMS
 

@@ -23,7 +23,11 @@ The official Paintaire blog — painting tips, industry news, and expert insight
 
 ## Commands
 
-All commands are run from the project root:
+All commands are run from the project root. **pnpm is required** (npm will not work —
+see below). The repo pins `pnpm@10.18.3` via the `packageManager` field in
+`package.json` (Corepack will use it automatically). `pnpm-workspace.yaml` approves
+build scripts for `esbuild` and `sharp` with both `allowBuilds` (pnpm 11+) and
+`onlyBuiltDependencies` (pnpm ≤10), so either major version works.
 
 | Command        | Action                                                      |
 | :------------- | :---------------------------------------------------------- |

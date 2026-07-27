@@ -33,6 +33,8 @@
       </label>
     </div>
 
+    <p id="newsletter-error" class="hidden text-sm text-red-600 dark:text-red-400"></p>
+
     <button
       type="submit"
       class="w-full bg-primary hover:bg-secondary dark:bg-accent dark:hover:bg-secondary text-white font-medium py-2 px-4 rounded-md transition-colors"
@@ -44,28 +46,57 @@
 
 <script>
   const form = document.getElementById('newsletter-form');
-  
+  // Set PUBLIC_NEWSLETTER_ENDPOINT to POST subscriptions to a real backend;
+  // when unset, a successful submission is simulated locally.
+  const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT;
+
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
+    const target = e.target as HTMLFormElement;
+    const formData = new FormData(target);
     const email = formData.get('email');
-    
-    // Here you would typically send this to your backend
-    console.log('Subscription request for:', email);
-    
-    // Show success message
+    const errorEl = document.getElementById('newsletter-error');
     const button = form.querySelector('button');
-    if (button) {
-      const originalText = button.textContent;
-      button.textContent = 'Subscribed!';
-      button.disabled = true;
-      
-      // Reset after 3 seconds
-      setTimeout(() => {
-        button.textContent = originalText;
-        button.disabled = false;
-        (e.target as HTMLFormElement).reset();
-      }, 3000);
+
+    const showError = (message: string) => {
+      if (errorEl) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+      }
+    };
+
+    const showSuccess = () => {
+      if (button) {
+        const originalText = button.textContent;
+        button.textContent = 'Subscribed!';
+        button.disabled = true;
+
+        setTimeout(() => {
+          button.textContent = originalText;
+          button.disabled = false;
+          target.reset();
+        }, 3000);
+      }
+    };
+
+    errorEl?.classList.add('hidden');
+
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+        showSuccess();
+      } catch (err) {
+        console.error('Newsletter subscription failed:', err);
+        showError('Something went wrong. Please try again.');
+      }
+    } else {
+      console.log('Subscription request for:', email);
+      showSuccess();
     }
   });
 </script>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="About Us"
+  description="Learn about Paintaire — professional residential and commercial painting services built on quality craftsmanship and customer care."
+  keywords={['about paintaire', 'painting company', 'professional painters', 'residential painting', 'commercial painting']}
+>
+  <div class="max-w-4xl mx-auto">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-primary dark:text-accent mb-4">About Paintaire</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
+        Professional painting services for homes and businesses — built on craftsmanship, reliability, and care.
+      </p>
+    </header>
+
+    <section class="prose dark:prose-invert max-w-none mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Our Story</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        Paintaire began with a simple belief: a fresh coat of paint can transform not just a space, but the way people feel in it. What started as a small crew of dedicated painters has grown into a full-service painting company serving residential and commercial clients across the region.
+      </p>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        From single-room refreshes to large-scale commercial projects, our team approaches every job with the same attention to detail and commitment to a flawless finish. This blog is an extension of that mission — a place where we share the tips, techniques, and industry insights we've picked up along the way.
+      </p>
+
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Our Mission</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        Our mission is to deliver beautiful, lasting results while making the painting process simple and stress-free for our clients. We combine quality materials, proven techniques, and clear communication to ensure every project is completed on time, on budget, and to the highest standard.
+      </p>
+    </section>
+
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6 text-center">Why Choose Paintaire</h2>
+      <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h3 class="text-xl font-bold text-primary dark:text-accent mb-2">Quality Craftsmanship</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Meticulous preparation, premium materials, and skilled application on every project — no shortcuts, ever.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h3 class="text-xl font-bold text-primary dark:text-accent mb-2">Reliable & On Time</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Clear schedules, honest estimates, and open communication from the first walkthrough to the final touch-up.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md">
+          <h3 class="text-xl font-bold text-primary dark:text-accent mb-2">Customer First</h3>
+          <p class="text-gray-600 dark:text-gray-300">
+            Your satisfaction is our measure of success. We treat every home and business like it's our own.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="text-center bg-white dark:bg-gray-800 rounded-lg p-8 shadow-md">
+      <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Let's Transform Your Space</h2>
+      <p class="text-gray-600 dark:text-gray-300 mb-6">
+        Ready to start your next painting project? We'd love to hear from you.
+      </p>
+      <a
+        href="/contact"
+        class="inline-block bg-primary text-white px-8 py-3 rounded-lg hover:bg-secondary dark:bg-accent dark:hover:bg-secondary transition-colors"
+      >
+        Get in Touch
+      </a>
+    </section>
+  </div>
+</BaseLayout>

@@ -18,8 +18,7 @@ const { Content } = await post.render();
 const authors = await getCollection('authors');
 const author = authors.find(a => a.slug === post.data.author);
 
-// Determine theme for comments
-const theme = Astro.cookies.get('theme')?.value === 'dark' ? 'dark' : 'light';
+const youtubeId = post.data.youtubeUrl?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/)?.[1];
 
 // Extract keywords from categories and title
 const keywords = [
@@ -93,6 +92,18 @@ const keywords = [
     <div class="prose dark:prose-invert prose-lg max-w-none" itemprop="articleBody">
       <Content />
     </div>
+
+    {youtubeId && (
+      <div class="mt-8 aspect-video">
+        <iframe
+          src={`https://www.youtube.com/embed/${youtubeId}`}
+          title={post.data.title}
+          class="w-full h-full rounded-lg"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    )}
 
     <!-- Rest of the component... -->
   </article>

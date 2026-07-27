@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 
+export const prerender = false;
+
 // Get URL parameters
 const { page = 1, category } = Astro.url.searchParams;
 const currentPage = parseInt(page.toString());

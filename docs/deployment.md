@@ -69,14 +69,32 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 - **Preview URL:** https://paintaire-blog-production.up.railway.app
 - **Custom domain:** `paintaire.com` (see DNS below)
 
+> **Cutover status (verified 2026-07-26):** DNS has **not** flipped yet —
+> `paintaire.com` still serves from Netlify (`fabulous-smakager-3e9d55.netlify.app`).
+> Both Railway custom domains are `ACTIVE` but unverified, certificates in
+> `VALIDATING_OWNERSHIP`, waiting on the records below.
+>
+> **Two Railway projects exist** (one per hostname) — they can be consolidated into a
+> single service holding both custom domains:
+>
+> | Project / service            | Domain              | Required CNAME              |
+> | ---------------------------- | ------------------- | --------------------------- |
+> | `paintaire-blog` / `paintaire-blog` | `paintaire.com` (apex) | `@` → `wql8sgyz.up.railway.app` |
+> | `paintaire-blog` / `blog`    | `www.paintaire.com` | `www` → `aq0rqpar.up.railway.app` (current: Netlify) |
+>
+> Each domain also needs its `_railway-verify` TXT record (values in the Railway
+> dashboard — they differ per domain).
+
 ### DNS for paintaire.com
 
 Railway requires these DNS records (live status in the Railway dashboard):
 
-| Type  | Name              | Value                                            |
-| ----- | ----------------- | ------------------------------------------------ |
-| CNAME | `@`               | `wql8sgyz.up.railway.app`                        |
-| TXT   | `_railway-verify` | `railway-verify=…` (full value in Railway dashboard) |
+| Type  | Name                  | Value                                              |
+| ----- | --------------------- | -------------------------------------------------- |
+| CNAME | `@`                   | `wql8sgyz.up.railway.app`                          |
+| TXT   | `_railway-verify`     | `railway-verify=…` (apex value in Railway dashboard) |
+| CNAME | `www`                 | `aq0rqpar.up.railway.app`                          |
+| TXT   | `_railway-verify.www` | `railway-verify=…` (www value in Railway dashboard) |
 
 Notes:
 

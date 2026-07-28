@@ -82,12 +82,17 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 > Each domain also needs its `_railway-verify` TXT record (values in the Railway
 > dashboard — they differ per domain).
 >
-> **Status (2026-07-28):** the Railway project (id
+> **Incident (2026-07-27, resolved 2026-07-28):** the Railway project (id
 > `92fcba77-ef0f-418d-8f97-a83d2ce70d88`, service `paintaire-blog`) was accidentally
-> deleted during project consolidation and is currently **soft-deleted, pending
-> purge on 2026-07-29T19:42Z**. Restore it via the Railway dashboard before the
-> purge deadline. Until then the site is **down** —
-> https://paintaire-blog-production.up.railway.app currently 404s.
+> soft-deleted during project consolidation — two concurrent automation sessions both
+> ran duplicate-project cleanup, and a stale confirmation led to a name-based
+> `railway project delete` that resolved to the wrong (canonical) project. It was
+> restored within the 2-day purge window via the GraphQL mutation
+> `projectScheduleDeleteCancel(id)` against `https://backboard.railway.com/graphql/v2`
+> (Bearer token = `accessToken` from `~/.railway/config.json`; there is no CLI/MCP
+> restore command). The site is back up; latest deployment is SUCCESS.
+> Lesson: never delete Railway projects by name — always by ID, and verify
+> `deletedAt` via `railway list --json` before assuming a delete is needed.
 
 ### DNS for paintaire.com
 

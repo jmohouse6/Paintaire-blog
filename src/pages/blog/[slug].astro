@@ -113,7 +113,7 @@ const keywords = [
       <div class="flex gap-2">
         {post.data.categories.map(category => (
           <a
-            href={`/blog?category=${category}`}
+            href={`/blog/category/${category}`}
             class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm hover:bg-gray-200 dark:hover:bg-gray-600"
           >
             {category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}

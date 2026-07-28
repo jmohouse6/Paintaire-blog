@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const categoryLabels: Record<string, string> = {
+  'painting-tips': 'Painting Tips',
+  'industry-news': 'Industry News',
+  'how-to-guides': 'How-to Guides',
+  'product-reviews': 'Product Reviews',
+};
+
+export function getStaticPaths() {
+  return [
+    'painting-tips',
+    'industry-news',
+    'how-to-guides',
+    'product-reviews',
+  ].map(category => ({ params: { category } }));
+}
+
+const { category } = Astro.params;
+const label = categoryLabels[category] ?? category;
+
+const posts = (await getCollection('posts'))
+  .filter(post => post.data.categories.includes(category))
+  .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf());
+---
+
+<BaseLayout title={`${label}`} description={`${label} articles from the Paintaire blog`}>
+  <div class="max-w-7xl mx-auto">
+    <nav class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+      <a href="/blog" class="hover:text-primary dark:hover:text-white">Blog</a>
+      <span class="mx-2">/</span>
+      <span>{label}</span>
+    </nav>
+
+    <h1 class="text-4xl font-bold text-primary dark:text-white mb-8">{label}</h1>
+
+    {posts.length > 0 ? (
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        {posts.map(post => (
+          <article class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+            {post.data.image && (
+              <img
+                src={post.data.image}
+                alt={post.data.title}
+                loading="lazy"
+                class="w-full h-48 object-cover"
+              />
+            )}
+            <div class="p-6">
+              <h2 class="text-xl font-semibold mb-2">
+                <a href={`/blog/${post.slug}`} class="text-primary dark:text-white hover:text-secondary dark:hover:text-accent">
+                  {post.data.title}
+                </a>
+              </h2>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">{post.data.excerpt}</p>
+              <span class="text-sm text-gray-500 dark:text-gray-400">
+                {new Date(post.data.publishedDate).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </span>
+            </div>
+          </article>
+        ))}
+      </div>
+    ) : (
+      <p class="text-gray-600 dark:text-gray-300 mb-12">No articles in this category yet.</p>
+    )}
+
+    <div class="flex flex-wrap gap-2">
+      {Object.entries(categoryLabels).map(([slug, name]) => (
+        <a
+          href={`/blog/category/${slug}`}
+          class={`px-4 py-2 rounded-full text-sm ${slug === category ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+        >
+          {name}
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

@@ -12,6 +12,9 @@ const postsPerPage = 9;
 // Fetch posts
 let posts = await getCollection('posts');
 
+// Get unique categories from ALL posts so the filter pills don't shrink when filtered
+const categories = [...new Set(posts.flatMap(post => post.data.categories))];
+
 // Filter by category if specified
 if (category) {
   posts = posts.filter(post => post.data.categories.includes(category));
@@ -23,12 +26,10 @@ posts = posts.sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDa
 // Calculate pagination
 const totalPosts = posts.length;
 const totalPages = Math.ceil(totalPosts / postsPerPage);
-const startIndex = (currentPage - 1) * postsPerPage;
+const page = Math.min(currentPage, Math.max(totalPages, 1));
+const startIndex = (page - 1) * postsPerPage;
 const endIndex = startIndex + postsPerPage;
 const paginatedPosts = posts.slice(startIndex, endIndex);
-
-// Get unique categories
-const categories = [...new Set(posts.flatMap(post => post.data.categories))];
 ---
 
 <BaseLayout title="Blog" description="Latest articles and insights from Paintaire">
@@ -95,7 +96,7 @@ const categories = [...new Set(posts.flatMap(post => post.data.categories))];
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
           <a
             href={`/blog?page=${pageNum}${category ? `&category=${category}` : ''}`}
-            class={`px-4 py-2 rounded ${pageNum === currentPage ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            class={`px-4 py-2 rounded ${pageNum === page ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
           >
             {pageNum}
           </a>

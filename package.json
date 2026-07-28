@@ -8,7 +8,7 @@
     "dev": "astro dev",
     "start": "node ./dist/server/entry.mjs",
     "build": "astro build",
-    "check": "tsc --noEmit --skipLibCheck",
+    "check": "astro sync && tsc --noEmit --skipLibCheck",
     "preview": "astro preview",
     "astro": "astro"
   },

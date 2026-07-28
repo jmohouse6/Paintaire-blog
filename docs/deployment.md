@@ -81,6 +81,13 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 >
 > Each domain also needs its `_railway-verify` TXT record (values in the Railway
 > dashboard — they differ per domain).
+>
+> **Status (2026-07-28):** the Railway project (id
+> `92fcba77-ef0f-418d-8f97-a83d2ce70d88`, service `paintaire-blog`) was accidentally
+> deleted during project consolidation and is currently **soft-deleted, pending
+> purge on 2026-07-29T19:42Z**. Restore it via the Railway dashboard before the
+> purge deadline. Until then the site is **down** —
+> https://paintaire-blog-production.up.railway.app currently 404s.
 
 ### DNS for paintaire.com
 

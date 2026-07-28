@@ -21,12 +21,22 @@ See its `ECOSYSTEM.md` for platform architecture and conventions — specificall
 
 ## Commands
 
-| Command           | Action                                      |
-| ----------------- | ------------------------------------------- |
-| `npm install`     | Install dependencies                        |
-| `npm run dev`     | Start dev server at `localhost:4321`        |
-| `npm run build`   | Build production site to `./dist/`          |
-| `npm run preview` | Preview the production build locally        |
+| Command        | Action                                                 |
+| -------------- | ------------------------------------------------------ |
+| `pnpm install` | Install dependencies                                   |
+| `pnpm dev`     | Start dev server at `localhost:4321`                   |
+| `pnpm build`   | Build production site to `./dist/`                     |
+| `pnpm preview` | Preview the production build locally                   |
+| `pnpm start`   | Run production server (`node ./dist/server/entry.mjs`) |
+
+This repo is pnpm-only (`packageManager: pnpm@10.18.3`, `pnpm-lock.yaml`). Enable
+Corepack (`corepack enable`) so the pinned version is used automatically.
+
+## Documentation
+
+- [Developer setup](docs/setup.md) — prerequisites, install, dev workflow
+- [Content authoring](docs/content-authoring.md) — Keystatic CMS and content collections
+- [Deployment](docs/deployment.md) — Railway hosting, DNS, and alternative hosts
 
 ## Content Editing
 

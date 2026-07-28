@@ -27,6 +27,7 @@ See its `ECOSYSTEM.md` for platform architecture and conventions — specificall
 | `pnpm dev`     | Start dev server at `localhost:4321`                   |
 | `pnpm build`   | Build production site to `./dist/`                     |
 | `pnpm preview` | Preview the production build locally                   |
+| `pnpm check`   | Type-check (`tsc --noEmit`; use instead of `astro check`, which OOMs on Keystatic types) |
 | `pnpm start`   | Run production server (`node ./dist/server/entry.mjs`) |
 
 This repo is pnpm-only (`packageManager: pnpm@10.18.3`, `pnpm-lock.yaml`). Enable

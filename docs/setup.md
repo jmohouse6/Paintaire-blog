@@ -50,6 +50,7 @@ pnpm start      # runs the standalone production server (node ./dist/server/entr
 | `pnpm dev`   | Start dev server at `localhost:4321`               |
 | `pnpm build` | Build production site to `./dist/`                 |
 | `pnpm preview` | Preview the production build locally             |
+| `pnpm check` | Type-check (`tsc --noEmit --skipLibCheck`; prefer over `pnpm astro check`, which OOMs on the Keystatic type graph) |
 | `pnpm astro` | Run Astro CLI commands (e.g. `pnpm astro check`) |
 
 ## Project Structure

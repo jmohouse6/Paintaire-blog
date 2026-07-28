@@ -69,10 +69,13 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 - **Preview URL:** https://paintaire-blog-production.up.railway.app
 - **Custom domain:** `paintaire.com` (see DNS below)
 
-> **Cutover status (verified 2026-07-26):** DNS has **not** flipped yet —
-> `paintaire.com` still serves from Netlify (`fabulous-smakager-3e9d55.netlify.app`).
-> Both Railway custom domains are `ACTIVE` but unverified, certificates in
-> `VALIDATING_OWNERSHIP`, waiting on the records below.
+> **Cutover status (LIVE since 2026-07-28):** DNS is flipped — both `paintaire.com`
+> and `www.paintaire.com` serve from Railway (`server: railway-hikari`), domains
+> Verified, certificates `VALID`. All routes, RSS, and sitemap smoke-tested 200 on
+> both hostnames; `www.paintaire.com/blog` 301s to the apex canonical (expected).
+> **Rollback:** repoint both CNAMEs at the Netlify site
+> (`fabulous-smakager-3e9d55.netlify.app`), which is left running until the soak
+> period (through ~2026-08-04) completes.
 >
 > **Consolidated (2026-07-26):** a single Railway project (`paintaire-blog`, service
 > `paintaire-blog`) now holds both custom domains plus
@@ -80,7 +83,8 @@ The site is deployed on Railway from the `master` branch of `jmohouse6/Paintaire
 > initial setup were deleted.
 >
 > Each domain also needs its `_railway-verify` TXT record (values in the Railway
-> dashboard — they differ per domain).
+> dashboard — they differ per domain). Keep the TXT records in place after cutover —
+> they are harmless and speed up re-verification if domains are ever re-added.
 >
 > **Incident (2026-07-27, resolved 2026-07-28):** the Railway project (id
 > `92fcba77-ef0f-418d-8f97-a83d2ce70d88`, service `paintaire-blog`) was accidentally

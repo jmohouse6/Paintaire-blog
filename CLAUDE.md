@@ -11,7 +11,7 @@ registered in `services.json`; it links to the ecosystem for architecture and co
 ## Working in This Repo
 
 - **Commands:** `pnpm dev` / `build` / `preview` (pnpm is canonical — `pnpm-lock.yaml`); `pnpm start` runs the production Node server.
-- **Deployment:** Railway — project/service `paintaire-blog`, auto-deploy on push to `master`. Build produces a standalone Node server (`@astrojs/node`): `pnpm build`, then `pnpm start`. Custom domains for paintaire.com/www are configured but DNS cutover is pending registrar records — see docs/deployment.md for the required records and current status.
+- **Deployment:** Railway — project/service `paintaire-blog`, auto-deploy on push to `master`. Build produces a standalone Node server (`@astrojs/node`): `pnpm build`, then `pnpm start`. **LIVE at https://paintaire.com since 2026-07-28** (rollback = repoint CNAMEs to Netlify, which stays up through the soak period) — see docs/deployment.md.
 - **Content editing:** Keystatic runs in local storage mode. Edit at `http://localhost:4321/keystatic`
   during `pnpm dev`; changes land as files under `src/content/` and must be committed via git.
 - **Content schema:** posts / authors / settings, defined in `keystatic.config.ts` and `src/content/config.ts`.

@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const authors = await getCollection('authors');
+const posts = await getCollection('posts');
+const postCounts = new Map<string, number>();
+for (const post of posts) {
+  postCounts.set(post.data.author, (postCounts.get(post.data.author) ?? 0) + 1);
+}
+---
+
+<BaseLayout title="Authors" description="Meet the Paintaire team of painting experts and contributors">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-4xl font-bold text-primary dark:text-white mb-8">Our Authors</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      {authors.map(author => (
+        <a
+          href={`/authors/${author.slug}`}
+          class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow"
+        >
+          {author.data.avatar && (
+            <img
+              src={author.data.avatar}
+              alt={author.data.name}
+              class="w-16 h-16 rounded-full object-cover"
+            />
+          )}
+          <div>
+            <h2 class="text-xl font-semibold text-primary dark:text-white">{author.data.name}</h2>
+            {author.data.bio && (
+              <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-2">{author.data.bio}</p>
+            )}
+            <span class="text-sm text-accent">
+              {postCounts.get(author.slug) ?? 0} {(postCounts.get(author.slug) ?? 0) === 1 ? 'article' : 'articles'}
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

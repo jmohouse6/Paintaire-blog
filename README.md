@@ -36,11 +36,16 @@ settings in `src/content/settings/`.
 
 ## Status / TODO
 
-- `site` is set to `https://paintaire.com` in `astro.config.mjs`, but **no deploy
-  config exists in this repo** (no Netlify/Vercel/Cloudflare config) — hosting is
-  not yet wired up.
-- The newsletter form (`src/components/NewsletterForm.astro`) is a **stub** — it
-  logs to the console and does not submit anywhere. Per the ecosystem
-  advertising-brand pattern, lead capture should POST to
-  `https://crm.moorhousecoating.com/api/v1/leads` with `form_source: "advertising_brand"`.
-- Comments component (`src/components/Comments.astro`) has no backing service.
+- `site` is set to `https://paintaire.com` in `astro.config.mjs`; the site builds
+  with the `@astrojs/node` standalone adapter (`pnpm build` → `pnpm start`). See
+  `docs/deployment.md` for hosting notes.
+- The newsletter form POSTs to `PUBLIC_NEWSLETTER_ENDPOINT` when set (submissions
+  are simulated locally otherwise). Per the ecosystem advertising-brand pattern,
+  lead capture should point at `https://crm.moorhousecoating.com/api/v1/leads`
+  with `form_source: "advertising_brand"`.
+- Comments (`src/components/Comments.astro`, Giscus) render only once the
+  `PUBLIC_GISCUS_REPO` / `PUBLIC_GISCUS_REPO_ID` env vars are configured.
+- **Images are missing** — `public/images/` is empty, but posts, authors, and
+  `BaseLayout` reference `/images/posts/*`, `/images/authors/*`, and
+  `/images/default-og.jpg`. All currently 404; upload real assets via Keystatic
+  or add them to `public/images/`.

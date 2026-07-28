@@ -27,6 +27,25 @@ const relatedPosts = (await getCollection('posts'))
   .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf())
   .slice(0, 3);
 
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.excerpt,
+  image: post.data.image ? [new URL(post.data.image, Astro.site).toString()] : undefined,
+  datePublished: post.data.publishedDate.toISOString(),
+  author: author ? {
+    '@type': 'Person',
+    name: author.data.name,
+    url: new URL(`/authors/${author.slug}`, Astro.site).toString(),
+  } : undefined,
+  mainEntityOfPage: {
+    '@type': 'WebPage',
+    '@id': new URL(Astro.url.pathname, Astro.site).toString(),
+  },
+  keywords: post.data.categories.join(', '),
+};
+
 // Extract keywords from categories and title
 const keywords = [
   ...post.data.categories,
@@ -48,6 +67,7 @@ const keywords = [
   keywords={keywords}
 >
   <article class="max-w-4xl mx-auto" itemscope itemtype="http://schema.org/BlogPosting">
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <meta itemprop="datePublished" content={post.data.publishedDate.toISOString()} />
     {author && <meta itemprop="author" content={author.data.name} />}
     

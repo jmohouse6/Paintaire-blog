@@ -55,7 +55,7 @@ settings in `src/content/settings/`.
   with `form_source: "advertising_brand"`.
 - Comments (`src/components/Comments.astro`, Giscus) render only once the
   `PUBLIC_GISCUS_REPO` / `PUBLIC_GISCUS_REPO_ID` env vars are configured.
-- **Images are missing** — `public/images/` is empty, but posts, authors, and
-  `BaseLayout` reference `/images/posts/*`, `/images/authors/*`, and
-  `/images/default-og.jpg`. All currently 404; upload real assets via Keystatic
-  or add them to `public/images/`.
+- **Images are placeholders** — the files under `public/images/` (post heroes,
+  author avatars, `default-og.jpg`) are generated brand placeholders so nothing
+  404s; replace them with real assets via Keystatic or by overwriting the files
+  (keep the same filenames or update the frontmatter references).

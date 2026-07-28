@@ -58,7 +58,7 @@ Because storage is local, the CMS only works while `pnpm dev` is running on your
 2. Fill in:
    - **Name** — full name; the slug becomes the author ID referenced by posts (e.g. `john-smith`).
    - **Avatar** — uploaded to `public/images/authors/`, referenced as `/images/authors/<filename>`.
-   - **Bio** — short biography, stored on the author entry (not currently rendered on the site — bylines show the author name only).
+   - **Bio** — short biography, rendered on the author's profile page at `/authors/<slug>` (avatar, bio, and the author's articles). Post bylines link to this page.
 3. Save, then select the new author when writing posts.
 
 Example (`src/content/authors/john-smith.md`):

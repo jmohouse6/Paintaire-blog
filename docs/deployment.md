@@ -204,3 +204,7 @@ If browser-based editing in production is ever needed, switch Keystatic to `stor
 - [ ] Blog content committed to git (Keystatic `local` storage — content ships with the repo).
 - [ ] If using the Node adapter: host runs `node ./dist/server/entry.mjs` and serves `dist/client/` assets (the standalone server does this itself).
 - [ ] If static: `output` switched to `'static'` and no SSR-only routes remain.
+
+## www redirect
+
+`src/middleware.ts` canonicalizes `www.paintaire.com` → `paintaire.com` with a 301 redirect (same path + query preserved). It runs for every request through the Node adapter, so no Railway or edge configuration is needed — just point both `paintaire.com` and `www.paintaire.com` at the same service.

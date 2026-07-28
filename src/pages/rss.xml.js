@@ -17,15 +17,20 @@ export async function GET(context) {
     title: 'Paintaire Blog',
     description: 'Professional painting insights, industry news, and expert tips',
     site: context.site,
-    items: sortedPosts.map((post) => ({
-      title: post.data.title,
-      pubDate: post.data.publishedDate,
-      description: post.data.excerpt,
-      link: `/blog/${post.slug}/`,
-      content: sanitizeHtml(marked.parse(post.body)),
-      categories: post.data.categories,
-      author: authorNames.get(post.data.author) || post.data.author
-    })),
-    customData: `<language>en-us</language>`,
+    xmlns: { atom: 'http://www.w3.org/2005/Atom' },
+    items: sortedPosts.map((post) => {
+      const postUrl = new URL(`/blog/${post.slug}/`, context.site).toString();
+      return {
+        title: post.data.title,
+        pubDate: post.data.publishedDate,
+        description: post.data.excerpt,
+        link: postUrl,
+        customData: `<guid isPermaLink="true">${postUrl}</guid>`,
+        content: sanitizeHtml(marked.parse(post.body)),
+        categories: post.data.categories,
+        author: authorNames.get(post.data.author) || post.data.author
+      };
+    }),
+    customData: `<language>en-us</language><atom:link rel="self" type="application/rss+xml" href="${new URL('/rss.xml', context.site).toString()}"/>`,
   });
 }

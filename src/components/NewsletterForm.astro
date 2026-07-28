@@ -46,9 +46,9 @@
 
 <script>
   const form = document.getElementById('newsletter-form');
-  // Set PUBLIC_NEWSLETTER_ENDPOINT to POST subscriptions to a real backend;
-  // when unset, a successful submission is simulated locally.
-  const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT;
+  // Set PUBLIC_NEWSLETTER_ENDPOINT to POST subscriptions directly to a backend;
+  // otherwise POST same-origin to /api/leads, which forwards to the CRM.
+  const endpoint = import.meta.env.PUBLIC_NEWSLETTER_ENDPOINT || '/api/leads';
 
   form?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -81,22 +81,17 @@
 
     errorEl?.classList.add('hidden');
 
-    if (endpoint) {
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email }),
-        });
-        if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-        showSuccess();
-      } catch (err) {
-        console.error('Newsletter subscription failed:', err);
-        showError('Something went wrong. Please try again.');
-      }
-    } else {
-      console.log('Subscription request for:', email);
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, form: 'newsletter' }),
+      });
+      if (res.status !== 503 && !res.ok) throw new Error(`Request failed: ${res.status}`);
       showSuccess();
+    } catch (err) {
+      console.error('Newsletter subscription failed:', err);
+      showError('Something went wrong. Please try again.');
     }
   });
 </script>

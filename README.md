@@ -50,10 +50,15 @@ settings in `src/content/settings/`.
 - `site` is set to `https://paintaire.com` in `astro.config.mjs`; the site builds
   with the `@astrojs/node` standalone adapter (`pnpm build` → `pnpm start`). See
   `docs/deployment.md` for hosting notes.
-- The newsletter form POSTs to `PUBLIC_NEWSLETTER_ENDPOINT` when set (submissions
-  are simulated locally otherwise). Per the ecosystem advertising-brand pattern,
-  lead capture should point at `https://crm.moorhousecoating.com/api/v1/leads`
-  with `form_source: "advertising_brand"`.
+- The newsletter and contact forms POST same-origin to `/api/leads`
+  (`src/pages/api/leads.ts`), which forwards leads server-side to the URL in
+  `CRM_LEADS_ENDPOINT` (server-side env var, not `PUBLIC_`) with
+  `form_source: "advertising_brand"` per the ecosystem advertising-brand
+  pattern — e.g. `https://crm.moorhousecoating.com/api/v1/leads`. When
+  `CRM_LEADS_ENDPOINT` is unset the endpoint returns 503 and the forms show
+  their success state (lead capture not wired yet). If ever needed, the
+  `PUBLIC_NEWSLETTER_ENDPOINT` / `PUBLIC_CONTACT_ENDPOINT` env vars override
+  the proxy with a direct browser POST to the given URL.
 - Comments (`src/components/Comments.astro`, Giscus) render only once the
   `PUBLIC_GISCUS_REPO` / `PUBLIC_GISCUS_REPO_ID` env vars are configured.
 - **Images are placeholders** — the files under `public/images/` (post heroes,

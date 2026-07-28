@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import FeaturedPosts from '../components/FeaturedPosts.astro';
 import CompanyIntro from '../components/CompanyIntro.astro';
+import RecentPosts from '../components/RecentPosts.astro';
 import { getCollection } from 'astro:content';
 
 const posts = await getCollection('posts');
@@ -9,9 +10,16 @@ const featuredPosts = posts
   .filter(post => post.data.featured)
   .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf())
   .slice(0, 3);
+
+const featuredSlugs = new Set(featuredPosts.map(post => post.slug));
+const recentPosts = posts
+  .filter(post => !featuredSlugs.has(post.slug))
+  .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf())
+  .slice(0, 6);
 ---
 
 <BaseLayout title="Home">
   <CompanyIntro />
   <FeaturedPosts posts={featuredPosts} />
+  <RecentPosts posts={recentPosts} />
 </BaseLayout>

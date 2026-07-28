@@ -17,7 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="grid md:grid-cols-3 gap-8">
       <div class="md:col-span-2">
-        <!-- Posts to PUBLIC_CONTACT_ENDPOINT when set; simulated locally otherwise -->
+        <!-- Posts same-origin to /api/leads by default; PUBLIC_CONTACT_ENDPOINT overrides with a direct POST -->
         <form
           id="contact-form"
           class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md"
@@ -120,25 +120,23 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     const errorEl = document.getElementById('contact-error');
     const button = form.querySelector('button');
 
-    // Set PUBLIC_CONTACT_ENDPOINT to POST messages to a real backend;
-    // submissions are simulated locally when it is unset.
-    const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
+    // Set PUBLIC_CONTACT_ENDPOINT to POST messages directly to a backend;
+    // otherwise POST same-origin to /api/leads, which forwards to the CRM.
+    const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT || '/api/leads';
 
-    if (endpoint) {
-      try {
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(Object.fromEntries(formData.entries())),
-        });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      } catch (err) {
-        if (errorEl) {
-          errorEl.textContent = 'Something went wrong sending your message. Please try again.';
-          errorEl.classList.remove('hidden');
-        }
-        return;
+    try {
+      const res = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...Object.fromEntries(formData.entries()), form: 'contact' }),
+      });
+      if (res.status !== 503 && !res.ok) throw new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      if (errorEl) {
+        errorEl.textContent = 'Something went wrong sending your message. Please try again.';
+        errorEl.classList.remove('hidden');
       }
+      return;
     }
 
     errorEl?.classList.add('hidden');

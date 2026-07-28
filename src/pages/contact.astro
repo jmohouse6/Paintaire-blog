@@ -17,7 +17,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
     <div class="grid md:grid-cols-3 gap-8">
       <div class="md:col-span-2">
-        <!-- TODO: wire this form up to a real backend endpoint (e.g. PUBLIC_CONTACT_ENDPOINT) once one exists -->
+        <!-- Posts to PUBLIC_CONTACT_ENDPOINT when set; simulated locally otherwise -->
         <form
           id="contact-form"
           class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md"
@@ -117,11 +117,31 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     e.preventDefault();
     const target = e.target as HTMLFormElement;
     const formData = new FormData(target);
-
-    // No backend exists yet — simulate a successful submission for now.
-    console.log('Contact request:', Object.fromEntries(formData.entries()));
-
+    const errorEl = document.getElementById('contact-error');
     const button = form.querySelector('button');
+
+    // Set PUBLIC_CONTACT_ENDPOINT to POST messages to a real backend;
+    // submissions are simulated locally when it is unset.
+    const endpoint = import.meta.env.PUBLIC_CONTACT_ENDPOINT;
+
+    if (endpoint) {
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(formData.entries())),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      } catch (err) {
+        if (errorEl) {
+          errorEl.textContent = 'Something went wrong sending your message. Please try again.';
+          errorEl.classList.remove('hidden');
+        }
+        return;
+      }
+    }
+
+    errorEl?.classList.add('hidden');
     if (button) {
       const originalText = button.textContent;
       button.textContent = 'Message Sent!';

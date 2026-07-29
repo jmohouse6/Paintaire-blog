@@ -2,6 +2,8 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 
+export const prerender = false;
+
 const categoryLabels: Record<string, string> = {
   'painting-tips': 'Painting Tips',
   'industry-news': 'Industry News',
@@ -9,17 +11,11 @@ const categoryLabels: Record<string, string> = {
   'product-reviews': 'Product Reviews',
 };
 
-export function getStaticPaths() {
-  return [
-    'painting-tips',
-    'industry-news',
-    'how-to-guides',
-    'product-reviews',
-  ].map(category => ({ params: { category } }));
+const { category = '' } = Astro.params;
+const label = categoryLabels[category];
+if (!label) {
+  return new Response('Not Found', { status: 404 });
 }
-
-const { category } = Astro.params;
-const label = categoryLabels[category] ?? category;
 
 const posts = (await getCollection('posts'))
   .filter(post => post.data.categories.includes(category))

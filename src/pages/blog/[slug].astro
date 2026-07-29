@@ -1,17 +1,14 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Comments from '../../components/Comments.astro';
 
-export async function getStaticPaths() {
-  const posts = await getCollection('posts');
-  return posts.map(post => ({
-    params: { slug: post.slug },
-    props: { post },
-  }));
-}
+export const prerender = false;
 
-const { post } = Astro.props;
+const post = await getEntry('posts', Astro.params.slug ?? '');
+if (!post) {
+  return new Response('Not Found', { status: 404 });
+}
 const { Content } = await post.render();
 
 // Get author data

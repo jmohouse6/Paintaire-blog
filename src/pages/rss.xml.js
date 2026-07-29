@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import sanitizeHtml from 'sanitize-html';
 import { marked } from 'marked';
 
+export const prerender = false;
+
 export async function GET(context) {
   const posts = await getCollection('posts');
   const authors = await getCollection('authors');

@@ -16,6 +16,8 @@ const recentPosts = posts
   .filter(post => !featuredSlugs.has(post.slug))
   .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf())
   .slice(0, 6);
+
+export const prerender = false;
 ---
 
 <BaseLayout title="Home">

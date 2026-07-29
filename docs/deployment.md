@@ -7,20 +7,27 @@ Deployment guide for the Paintaire Blog (Astro 4, `output: 'hybrid'`) at paintai
 | Item                | Value                                              |
 | ------------------- | -------------------------------------------------- |
 | Framework           | Astro 4 (`astro@^4.5.0`)                           |
-| Output mode         | `hybrid` (static by default, SSR on demand)        |
+| Output mode         | `hybrid` (all pages SSR via `prerender = false`)   |
 | Adapter (current)   | `@astrojs/node` (standalone)                       |
 | Package manager     | pnpm                                               |
 | Build command       | `pnpm build` → outputs to `./dist/`                |
 | Start command       | `node ./dist/server/entry.mjs` (SSR server)        |
 | Canonical site URL  | `https://paintaire.com` (set in `astro.config.mjs`) |
 | Sitemap             | Generated at build; excludes `/admin` and `/keystatic` paths |
-| RSS feed            | `/rss.xml` (static, prerendered at build)          |
+| RSS feed            | `/rss.xml` (server-rendered per request)           |
 | CMS                 | Keystatic, `storage: 'local'` (git-based, local)   |
 | Hosting (current)   | Railway — project/service `paintaire-blog` (production) |
 
 ## The adapter caveat
 
 `output: 'hybrid'` means pages are prerendered to static HTML by default, but any route that opts into SSR (`export const prerender = false`) needs a **server adapter** at runtime. Astro will not build hybrid/SSR output without one.
+
+**Every page route in this repo sets `prerender = false`.** Prerendered pages are
+served as static files by the adapter and bypass Astro middleware — and our
+middleware (`src/middleware.ts`) applies the www→apex redirect and security
+headers (HSTS, CSP, X-Frame-Options, etc.), so all HTML routes are server-rendered
+to keep those protections uniform. Only static assets (images, `/_astro/*`,
+sitemap XML) are served directly. Keystatic's admin routes also require `hybrid`.
 
 This repo **already has an adapter installed**: `@astrojs/node` in `standalone` mode (`astro.config.mjs`). That means the build works out of the box and produces a self-contained Node server:
 

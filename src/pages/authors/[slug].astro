@@ -1,16 +1,13 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
-export async function getStaticPaths() {
-  const authors = await getCollection('authors');
-  return authors.map(author => ({
-    params: { slug: author.slug },
-    props: { author },
-  }));
-}
+export const prerender = false;
 
-const { author } = Astro.props;
+const author = await getEntry('authors', Astro.params.slug ?? '');
+if (!author) {
+  return new Response('Not Found', { status: 404 });
+}
 
 const posts = (await getCollection('posts'))
   .filter(post => post.data.author === author.slug)

@@ -8,6 +8,8 @@ const postCounts = new Map<string, number>();
 for (const post of posts) {
   postCounts.set(post.data.author, (postCounts.get(post.data.author) ?? 0) + 1);
 }
+
+export const prerender = false;
 ---
 
 <BaseLayout title="Authors" description="Meet the Paintaire team of painting experts and contributors">

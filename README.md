@@ -54,13 +54,16 @@ settings in `src/content/settings/`.
   (`src/pages/api/leads.ts`), which forwards leads server-side to the URL in
   `CRM_LEADS_ENDPOINT` (server-side env var, not `PUBLIC_`) with
   `form_source: "advertising_brand"` per the ecosystem advertising-brand
-  pattern — e.g. `https://crm.moorhousecoating.com/api/v1/leads`. When
-  `CRM_LEADS_ENDPOINT` is unset the endpoint returns 503 and the forms show
+  pattern — e.g. `https://crm.moorhousecoating.com/api/leads` (lead **creation**
+  is `/api/leads`; the `/api/v1/*` family is read-only). The CRM requires an
+  `X-API-Key`, which the proxy sends from the `CRM_API_KEY` server-side env var.
+  When either var is unset the endpoint returns 503 and the forms show
   their success state (lead capture not wired yet). If ever needed, the
   `PUBLIC_NEWSLETTER_ENDPOINT` / `PUBLIC_CONTACT_ENDPOINT` env vars override
   the proxy with a direct browser POST to the given URL.
-- Comments (`src/components/Comments.astro`, Giscus) render only once the
-  `PUBLIC_GISCUS_REPO` / `PUBLIC_GISCUS_REPO_ID` env vars are configured.
+- Comments (`src/components/Comments.astro`, Giscus) are configured via
+  `PUBLIC_GISCUS_*` env vars (repo `jmohouse6/Paintaire-blog`, category
+  `General`) and render on post pages.
 - **Images are placeholders** — the files under `public/images/` (post heroes,
   author avatars, `default-og.jpg`) are generated brand placeholders so nothing
   404s; replace them with real assets via Keystatic or by overwriting the files

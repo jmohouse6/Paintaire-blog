@@ -46,13 +46,18 @@ export const POST: APIRoute = async ({ request }) => {
     return jsonResponse({ error: 'Lead capture not configured' }, 503);
   }
 
+  const apiKey = import.meta.env.CRM_API_KEY;
+  if (!apiKey) {
+    return jsonResponse({ error: 'Lead capture not configured' }, 503);
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10_000);
 
   try {
     const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
       body: JSON.stringify({
         ...fields,
         email,

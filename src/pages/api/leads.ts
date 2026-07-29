@@ -41,6 +41,12 @@ export const POST: APIRoute = async ({ request }) => {
 
   const form = fields.form === 'contact' ? 'contact' : 'newsletter';
 
+  // CRM contacts require first_name/last_name (NOT NULL); derive from the single
+  // `name` field the forms collect, with form-based fallbacks.
+  const nameParts = (fields.name ?? '').trim().split(/\s+/).filter(Boolean);
+  fields.first_name = fields.first_name || nameParts[0] || (form === 'contact' ? 'Website' : 'Newsletter');
+  fields.last_name = fields.last_name || nameParts.slice(1).join(' ') || (form === 'contact' ? 'Contact' : 'Signup');
+
   const endpoint = import.meta.env.CRM_LEADS_ENDPOINT;
   if (!endpoint) {
     return jsonResponse({ error: 'Lead capture not configured' }, 503);
